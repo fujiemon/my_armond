@@ -1,0 +1,76 @@
+<html>
+<head>
+
+<meta http-equiv="Content-Type"content="text/html;charset=UTF-8">
+
+<script type="text/JavaScript" src="./hensu.js"></script>
+<script type="text/JavaScript" src="./wardsc.js"></script>
+<script type="text/JavaScript" src="./main.js"></script>
+
+</head>
+<body>
+
+
+<form style="height:100%;">
+<!--テキスト内の内容-->
+<textarea style="width:50%;height:40%;" name="I">
+I have a pen{1,2}
+</textarea>
+<br>
+<input type="button" onClick="this.form.listener();" value="実行">
+<br>
+<textarea style="width:50%;height:40%;" name="O"></textarea>
+</form>
+
+
+
+<script>
+
+var form = document.forms[0];
+var areaI = form.elements["I"];
+var areaO = form.elements["O"];
+var textP = form.elements["P"];
+
+form.listener = function() {
+	var text = areaI.value ;
+
+	var scanner = new Scanner(text);
+
+	var t = "";
+
+	var token;
+	var tokenId;
+
+	while ((tokenId = scanner.getNextTokenId()) != Symbols.TOKEN_ID__EOF) {
+		window.status = scanner.currentPosition + "/" + scanner.eofPosition;
+
+		switch (tokenId) {
+			case Symbols.TOKEN_ID__COMMENT_LINE :
+				token = scanner.getCurrentToken();
+				token = token.substring(0, token.length - 1);
+				t += token+"\n";
+				break;
+			case Symbols.TOKEN_ID__COMMENT_BLOCK :
+				t += scanner.getCurrentToken()+"\n";
+				break;
+			case Symbols.TOKEN_ID__WHITESPACE :
+				break;
+			case void 0 :
+				alert("undefined");
+				return;
+			case Symbols.TOKEN_ID__ERROR :
+				alert("Error!");
+				return;
+			default :
+				t += scanner.getCurrentToken()+"\n";
+		}
+	}
+
+	areaO.value = t;
+};
+
+</script>
+
+
+
+</body></html>
